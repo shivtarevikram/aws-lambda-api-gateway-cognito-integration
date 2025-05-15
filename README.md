@@ -6,15 +6,15 @@ Create an API based on AWS services that can create a VPC with multiple subnets 
 
 ## Overview
 
-This project creates **AWS Lambda** function built using Python to create VPC resources, store results in **AWS DynamoDB**. Also implements a secure, serverless API that fetches an result stored in DyanmoDB table containing VPC ID with subnets details. The API is protected using **Amazon Cognito** authorizer. API is accesible only to Cognito authenticated users and authorization is open to all authenticated users.
+This project implements a secure, serverless APIs that can create VPC resources, stores results in DynamoDB and fetches data from DynamoDB table. It has **AWS Lambda** function which is built using Python to create VPC resources, store results in **AWS DynamoDB** and fetches data. APIs are protected using **Amazon Cognito** authorizer. APIs are accesible only to Cognito authenticated users and authorization is open to all authenticated users.
 
 ## Features
 
-- Create a VPC and multiple subnets by invoking Lambda function
+- Create a VPC and multiple subnets using APIs.
 - AWS Lambda function written in Python 3.13 runtime
 - AWS API gateway is secured using Amazon Cognito using token based authentication which gets expired in 60 minutes
-- AWS API is acessible to all authenticated users
-- Stores and retrieves created VPC resource data
+- AWS APIs are acessible to all authenticated users
+- APIs stores and retrieves created VPC resource data
 
 ## Technologies Used
 
@@ -39,14 +39,15 @@ Clone the repository to your machine for Lambda deployment.
 ### 2. Deploy Lambda Function
 - Create the Lambda function and upload lambda_function.py and functions.py files.
 - Lambda should have permissions to DynamoDB (for storing results), VPC (for creating VPC and subnets) and CloudWatch (for logs: attach AWS managed policy AWSLambdaBasicExecutionRole).
-- To create VPC resources, invoke lambda function using JSON object provided in event_to_invoke_lambda.json file.
-- This will create VPC and Subnets in single invokation.
+- To create VPC resources, invoke API using JSON payload provided in vpc_creation_payload.json file.
+- This will create VPC and Subnets using API.
 
 ### 3. Configure API Gateway
 - Create a new REST API
-- Add a resource and GET method (e.g., GET /getVPCResources)
-- Integrate it with the Lambda function
-- Add a Cognito authorizer and attach it to the method request
+- Add a resource and POST method for creating VPC resources and storing data in DynamoDB table (e.g., GET /getVPCResources)
+- Add a resource and GET method for fetching data from DynamoDB table (e.g., GET /getVPCResources)
+- Integrate these APIs with the Lambda function
+- Add a Cognito authorizer and attach it to the method requests of both APIs
 
 ### 4. Set Up Amazon Cognito
 - Create a Cognito User Pool
@@ -55,7 +56,7 @@ Clone the repository to your machine for Lambda deployment.
 - Integrate Cognito in API gateway
 
 ## Authentication
-- The API is secured using Amazon Cognito.
+- APIs are secured using Amazon Cognito.
 - Only users with valid tokens can access the endpoint.
 - Tokens must be passed in the Authorization header as: Authorization: <your-token>
 
