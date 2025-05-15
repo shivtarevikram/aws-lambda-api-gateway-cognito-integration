@@ -92,9 +92,6 @@ def getVPCInfo(event):
     try:   
         table = dynamodb.Table('dynamo-db-table-name')
         getDynamoDBResponse = table.scan()
-        all_data = getDynamoDBResponse['Items']
-        print("All items from Dynamodb:"+str(all_data))
-        print(getDynamoDBResponse)
         return getDynamoDBResponse
     except Exception as e:
         print(f"An error occurred: {e}")
