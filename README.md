@@ -15,6 +15,7 @@ This project implements a secure, serverless APIs that can create VPC resources,
 - AWS API gateway is secured using Amazon Cognito using token based authentication which gets expired in 60 minutes
 - AWS APIs are acessible to all authenticated users
 - APIs stores and retrieves created VPC resource data
+- No manual VPC resources provisioning
 
 ## Technologies Used
 
@@ -39,8 +40,6 @@ Clone the repository to your machine for Lambda deployment.
 ### 2. Deploy Lambda Function
 - Create the Lambda function and upload lambda_function.py and functions.py files.
 - Lambda should have permissions to DynamoDB (for storing results), VPC (for creating VPC and subnets) and CloudWatch (for logs: attach AWS managed policy AWSLambdaBasicExecutionRole).
-- To create VPC resources, invoke API using JSON payload provided in vpc_creation_payload.json file.
-- This will create VPC and Subnets using API.
 
 ### 3. Configure API Gateway
 - Create a new REST API
@@ -48,6 +47,8 @@ Clone the repository to your machine for Lambda deployment.
 - Add a resource and GET method for fetching data from DynamoDB table (e.g., GET /getVPCResources)
 - Integrate these APIs with the Lambda function
 - Add a Cognito authorizer and attach it to the method requests of both APIs
+- To create VPC resources, invoke API using JSON payload provided in vpc_creation_payload.json file along with with Authorization token.
+- To fetch VPC resources, invoke API using with Authorization token.
 
 ### 4. Set Up Amazon Cognito
 - Create a Cognito User Pool
