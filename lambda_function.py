@@ -18,7 +18,7 @@ def lambda_handler(event, context):
         HTML_CONTENT_END = "</body></html>"
         html_content = str()
         if len(getVPCInfoResponse['Items']) == 0:
-            return "<h2>No VPC Resources Created!</h2><h3>Please first run the lambda function to create VPC Resources.</h3>"
+            return "<h2>No VPC resources created yet!</h2><h3>Please first run the lambda function to create VPC Resources.</h3>"
         else:
             s1 = json.dumps(getVPCInfoResponse['Items'])
             x = json.loads(s1)
