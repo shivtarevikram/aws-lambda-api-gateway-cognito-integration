@@ -1,12 +1,12 @@
 import boto3
 
 def createVPCResources(event):
-    print("Inside createVPCResources function")
     vpc_cidr = event['vpc_cidr']
     subnets = event['subnets']
-    lambda_name = "SRE-B2B-VPC-POC"
-    vpc_name = "VPC-POC"
+    vpc_name = event['vpc_name']
+    lambda_name = "SRE-B2B-VPC-POC"   #Include your lambda function name here
     try:
+        # Create VPC
         client = boto3.client('ec2',region_name='ap-south-2')
         create_vpc_response = client.create_vpc(
             CidrBlock=vpc_cidr,
@@ -28,15 +28,17 @@ def createVPCResources(event):
         )
         print("VPC Creation Response:")
         print(create_vpc_response)
-        
+
         # Wait for VPC to become available
         vpc_id = create_vpc_response['Vpc']['VpcId']
         vpc_client = boto3.resource('ec2').Vpc(vpc_id)
         vpc_client.wait_until_available()
         print(f"VPC '{vpc_name}' is now available")
+        # End - Create VPC
+
+        # Create Subnets
         vpc_cidr = event['vpc_cidr']
         subnets = event['subnets']
-        
         for subnet in subnets:
             print(f"Creating Subnet for: {subnet}")
             try:
@@ -61,7 +63,8 @@ def createVPCResources(event):
                     VpcId=vpc_id,
                 )
                 print(f"Subnet created: {create_subnet_response}")
-                #Store Subnet Data in DynamoDB
+                
+                #Store data in DynamoDB
                 try:
                     dynamodb_client = boto3.client('dynamodb')
                     data_response = dynamodb_client.put_item(TableName='SRE-B2B-VPC-POC-DB', 
@@ -78,13 +81,13 @@ def createVPCResources(event):
                 print(f"An error occurred while creating Subnets: {e}")
         print("Subnets Data:")
         print(create_subnet_response)
-        print(create_vpc_response)
+        # End Create Subnets
         return create_vpc_response
     except Exception as e:
         print(f"An error occurred while creating VPC: {e}")
     
 def getVPCInfo(event):
-    print("Inside getVPCInfo function")
+    # Function to get VPC and Subnets Info from DynamoDB
     dynamodb = boto3.resource('dynamodb')
     try:   
         table = dynamodb.Table('SRE-B2B-VPC-POC-DB')
