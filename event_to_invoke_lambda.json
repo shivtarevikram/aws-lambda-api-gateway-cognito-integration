@@ -1,0 +1,31 @@
+{
+    "body-json": {
+        "op": "createVPCResources",
+        "vpc_cidr": "10.1.0.0/24",
+        "vpc_name": "Lambda-API-Cognito-VPC",
+        "subnets": [
+            {
+                "subnet_cidr": "10.1.0.0/26",
+                "subnet_az": "ap-south-2a",
+                "subnet_name": "Public-Subnet-1"
+            },
+            {
+                "subnet_cidr": "10.1.0.64/26",
+                "subnet_az": "ap-south-2b",
+                "subnet_name": "Private-Subnet-1"
+            },
+            {
+                "subnet_cidr": "10.1.0.128/26",
+                "subnet_az": "ap-south-2c",
+                "subnet_name": "Private-Subnet-2"
+            }
+        ]
+    },
+    "tagsflag": "true",
+    "params": {
+        "path": {},
+        "querystring": {
+            "op": "getVPCInfo"
+        }
+    }
+}
