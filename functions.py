@@ -67,7 +67,7 @@ def createVPCResources(event):
                 #Store data in DynamoDB
                 try:
                     dynamodb_client = boto3.client('dynamodb')
-                    data_response = dynamodb_client.put_item(TableName='SRE-B2B-VPC-POC-DB', 
+                    data_response = dynamodb_client.put_item(TableName='dynamo-db-table-name', 
                     Item={
                         'subnetID': {'S':str(create_subnet_response['Subnet']['SubnetId'])},
                         'subnetCIDR': {'S':str(create_subnet_response['Subnet']['CidrBlock'])},
