@@ -24,7 +24,6 @@ def lambda_handler(event, context):
             x = json.loads(s1)
             HTML_CONTENT_START += "<table><tr><th>VPC ID</th><th>Subnet ID</th><th>Subnet CIDR</th><th>Subnet AZ</th><th>Subnet ARN</th></tr>"
             for item in x:
-                print(item['vpcID'])
                 table_row = "<tr style='background: #FFA500'><td>"
                 html_content += table_row + item['vpcID'] + "</td><td>" + item['subnetID'] + "</td><td>" + item['subnetCIDR'] + "</td><td>" + item['subnetAZ'] + "</td><td>" + item['subnetARN'] + "</td></tr>"
             html_content_final = HTML_CONTENT_START + html_content + "</table>" + HTML_CONTENT_END
