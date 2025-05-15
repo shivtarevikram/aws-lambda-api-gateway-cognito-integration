@@ -10,6 +10,7 @@ def lambda_handler(event, context):
     
     if body == "createVPCResources":
         createVPCResponse = functions.createVPCResources(event['body-json'])
+        return createVPCResponse
     elif body == 'getVPCInfo':
         getVPCInfoResponse = functions.getVPCInfo(body)
         print("------------------Subnets Data from DynamoDB-----------------")
