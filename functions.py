@@ -90,7 +90,7 @@ def getVPCInfo(event):
     # Function to get VPC and Subnets Info from DynamoDB
     dynamodb = boto3.resource('dynamodb')
     try:   
-        table = dynamodb.Table('SRE-B2B-VPC-POC-DB')
+        table = dynamodb.Table('dynamo-db-table-name')
         getDynamoDBResponse = table.scan()
         all_data = getDynamoDBResponse['Items']
         print("All items from Dynamodb:"+str(all_data))
