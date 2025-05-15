@@ -4,7 +4,7 @@ def createVPCResources(event):
     vpc_cidr = event['vpc_cidr']
     subnets = event['subnets']
     vpc_name = event['vpc_name']
-    lambda_name = "SRE-B2B-VPC-POC"   #Include your lambda function name here
+    lambda_name = "lambda-function-name"   #Include your lambda function name here
     try:
         # Create VPC
         client = boto3.client('ec2',region_name='ap-south-2')
