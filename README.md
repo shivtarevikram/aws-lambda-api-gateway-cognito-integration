@@ -40,6 +40,7 @@ Clone the repository to your machine for Lambda deployment.
 You can zip and upload the Lambda function.
 zip function.zip lambda_function.py
 aws lambda update-function-code --function-name createVpcFunction --zip-file fileb://function.zip
+To create VPC resources, invoke lambda function using JSON object provided in event_to_invoke_lambda.json file.
 
 ### 3. Configure API Gateway
 Create a new REST API
