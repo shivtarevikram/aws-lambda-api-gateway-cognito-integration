@@ -12,7 +12,7 @@ This project creates **AWS Lambda** function built using Python to create VPC re
 
 - Create a VPC and multiple subnets by invoking Lambda function
 - AWS Lambda function written in Python 3.13 runtime
-- AWS API gateway is Secured using Amazon Cognito using token based authentication which gets expired in 60 minutes
+- AWS API gateway is secured using Amazon Cognito using token based authentication which gets expired in 60 minutes
 - AWS API is acessible to all authenticated users
 - Stores and retrieves created VPC resource data
 
@@ -27,7 +27,7 @@ This project creates **AWS Lambda** function built using Python to create VPC re
 
 ## Prerequisites
 
-- AWS account with permissions to manage VPC, Lambda, API Gateway, and Cognito
+- AWS account with permissions to manage VPC, Lambda, API Gateway, DynamoDB and Cognito
 - AWS IAM role with appropriate IAM permissions
 - AWS Lambda function with Python 3.8 or later
 
@@ -37,40 +37,29 @@ This project creates **AWS Lambda** function built using Python to create VPC re
 Clone the repository to your machine for Lambda deployment.
 
 ### 2. Deploy Lambda Function
-You can zip and upload the Lambda function.
-zip function.zip lambda_function.py
-aws lambda update-function-code --function-name createVpcFunction --zip-file fileb://function.zip
-To create VPC resources, invoke lambda function using JSON object provided in event_to_invoke_lambda.json file.
+- Create the Lambda function and upload lambda_function.py and functions.py files.
+- Lambda should have permissions to DynamoDB (for storing results), VPC (for creating VPC and subnets) and CloudWatch (for logs: attach AWS managed policy AWSLambdaBasicExecutionRole).
+- To create VPC resources, invoke lambda function using JSON object provided in event_to_invoke_lambda.json file.
+- This will create VPC and Subnets in single invokation.
 
 ### 3. Configure API Gateway
-Create a new REST API
-
-Add a resource and GET method (e.g., GET /getVPCResources)
-
-Integrate with your Lambda function
-
-Add a Cognito authorizer and require it on the method
+- Create a new REST API
+- Add a resource and GET method (e.g., GET /getVPCResources)
+- Integrate it with the Lambda function
+- Add a Cognito authorizer and attach it to the method request
 
 ### 4. Set Up Amazon Cognito
-Create a Cognito User Pool
-
-Add an App Client
-
-Use the User Pool as the API Gateway authorizer
-
-Integrate Cognito in API gateway
+- Create a Cognito User Pool
+- Add an App Client
+- Use the User Pool as the API Gateway authorizer
+- Integrate Cognito in API gateway
 
 ## Authentication
-The API is secured using Amazon Cognito.
-
-Only users with valid tokens can access the endpoint.
-
-Tokens must be passed in the Authorization header as:
-Authorization: <your-token>
+- The API is secured using Amazon Cognito.
+- Only users with valid tokens can access the endpoint.
+- Tokens must be passed in the Authorization header as: Authorization: <your-token>
 
 ## Security Notes
-No hardcoded secrets are used.
-
-All access is authenticated via Cognito.
-
-Lambda functions run with least-privilege IAM roles.
+- No hardcoded secrets are used.
+- All access is authenticated via Cognito.
+- Lambda functions run with least-privilege IAM roles.
