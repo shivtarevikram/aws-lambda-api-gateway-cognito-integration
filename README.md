@@ -41,20 +41,18 @@ Clone the repository to your machine for Lambda deployment.
 - Create the Lambda function and upload lambda_function.py and functions.py files.
 - Lambda should have permissions to DynamoDB (for storing results), VPC (for creating VPC and subnets) and CloudWatch (for logs: attach AWS managed policy AWSLambdaBasicExecutionRole).
 
-### 3. Configure API Gateway
+### 3. Set Up Amazon Cognito
+- Create a Cognito User Pool
+- Add an App Client (Dont forget to select Implicit Grant option in OAuth 2.0 grant types)
+
+### 4. Configure API Gateway
 - Create a new REST API
 - Add a resource and POST method for creating VPC resources and storing data in DynamoDB table (e.g., POST /createVPCResources)
 - Add a resource and GET method for fetching data from DynamoDB table (e.g., GET /getVPCResources)
 - Integrate these APIs with the Lambda function
-- Add a Cognito authorizer and attach it to the method requests of both APIs
-- To create VPC resources, invoke API using JSON payload provided in vpc_creation_payload.json file along with with Authorization token.
-- To fetch VPC resources, invoke API using with Authorization token.
-
-### 4. Set Up Amazon Cognito
-- Create a Cognito User Pool
-- Add an App Client
-- Use the User Pool as the API Gateway authorizer
-- Integrate Cognito in API gateway
+- Create Cognito authorizer with the Cognito User Pool and attach it to the method requests of both APIs
+- To create VPC resources, invoke API with querystring (?op=createVPCResources) and JSON payload provided in vpc_creation_payload.json file along with Authorization token passed in headers.
+- To fetch VPC resources, invoke API with querystring (?op=getVPCInfo) and passing Authorization token in headers.
 
 ## Authentication
 - APIs are secured using Amazon Cognito.
