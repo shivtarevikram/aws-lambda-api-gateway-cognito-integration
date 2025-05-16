@@ -30,7 +30,7 @@ This project implements a secure, serverless APIs that can create VPC resources,
 
 - AWS account with permissions to manage VPC, Lambda, API Gateway, DynamoDB and Cognito
 - AWS IAM role with appropriate IAM permissions
-- AWS Lambda function with Python 3.8 or later
+- AWS Lambda function with Python 3.10 or later (AWS is ending support for Python 3.9 in Lambda on November 3, 2025.)
 
 ## Setup Instructions
 
