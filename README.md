@@ -43,7 +43,7 @@ Clone the repository to your machine for Lambda deployment.
 
 ### 3. Configure API Gateway
 - Create a new REST API
-- Add a resource and POST method for creating VPC resources and storing data in DynamoDB table (e.g., GET /getVPCResources)
+- Add a resource and POST method for creating VPC resources and storing data in DynamoDB table (e.g., POST /createVPCResources)
 - Add a resource and GET method for fetching data from DynamoDB table (e.g., GET /getVPCResources)
 - Integrate these APIs with the Lambda function
 - Add a Cognito authorizer and attach it to the method requests of both APIs
