@@ -9,9 +9,13 @@ def lambda_handler(event, context):
         body=(event['params']['querystring']['op'])
     
     if body == "createVPCResources":
+        # To create VPC, Subnets and store the result in DynamoDB table
+        print(event)
         createVPCResponse = functions.createVPCResources(event['body-json'])
         return createVPCResponse
     elif body == 'getVPCInfo':
+        # To fetch resource creation data from DynamoDB table and show in tabular format
+        print(event)
         getVPCInfoResponse = functions.getVPCInfo(body)
         print("------------------Subnets Data from DynamoDB-----------------")
         print(getVPCInfoResponse)
@@ -19,15 +23,14 @@ def lambda_handler(event, context):
         HTML_CONTENT_END = "</body></html>"
         html_content = str()
         if len(getVPCInfoResponse['Items']) == 0:
-            return "<h2>No VPC resources created yet!</h2><h3>Please first run the lambda function to create VPC Resources.</h3>"
+            return "<h2>No VPC resources created yet!</h2><h3>Please first invoke the VPC creation API to create VPC Resources.</h3>"
         else:
-            s1 = json.dumps(getVPCInfoResponse['Items'])
-            x = json.loads(s1)
             HTML_CONTENT_START += "<table><tr><th>VPC ID</th><th>Subnet ID</th><th>Subnet CIDR</th><th>Subnet AZ</th><th>Subnet ARN</th></tr>"
-            for item in x:
+            items = getVPCInfoResponse['Items']
+            for item in items:
                 table_row = "<tr style='background: #FFA500'><td>"
                 html_content += table_row + item['vpcID'] + "</td><td>" + item['subnetID'] + "</td><td>" + item['subnetCIDR'] + "</td><td>" + item['subnetAZ'] + "</td><td>" + item['subnetARN'] + "</td></tr>"
             html_content_final = HTML_CONTENT_START + html_content + "</table>" + HTML_CONTENT_END
             return html_content_final
     else:
-        return "<h2>Invalid query string parameter value!</h2><h3>Allowed value is 'getVPCInfo'.</h3>"
+        return "<h2>Invalid querystring passed!</h2>"
