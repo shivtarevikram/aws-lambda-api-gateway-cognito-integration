@@ -1,13 +1,15 @@
-import boto3
+import boto3,os
 
 def createVPCResources(event):
+    print(event)
+    region = os.environ['AWS_REGION'] #Value pulled from Environment variable
+    event = event['body-json']
     vpc_cidr = event['vpc_cidr']
-    subnets = event['subnets']
     vpc_name = event['vpc_name']
-    lambda_name = "lambda-function-name"   #Include your lambda function name here
+    lambda_name = os.environ['lambdaName'] #Value pulled from Environment variable
     try:
         # Create VPC
-        client = boto3.client('ec2',region_name='ap-south-2')
+        client = boto3.client('ec2',region_name=region)
         create_vpc_response = client.create_vpc(
             CidrBlock=vpc_cidr,
             TagSpecifications=[{
@@ -22,9 +24,7 @@ def createVPCResources(event):
                         'Value': vpc_name
                     },
                 ]
-            },],
-            DryRun=False,
-            AmazonProvidedIpv6CidrBlock=False
+            },]
         )
         print("VPC Creation Response:")
         print(create_vpc_response)
@@ -37,7 +37,6 @@ def createVPCResources(event):
         # End - Create VPC
 
         # Create Subnets
-        vpc_cidr = event['vpc_cidr']
         subnets = event['subnets']
         for subnet in subnets:
             print(f"Creating Subnet for: {subnet}")
@@ -67,7 +66,7 @@ def createVPCResources(event):
                 #Store data in DynamoDB
                 try:
                     dynamodb_client = boto3.client('dynamodb')
-                    data_response = dynamodb_client.put_item(TableName='dynamo-db-table-name', 
+                    data_response = dynamodb_client.put_item(TableName='dynamodb_table_name', 
                     Item={
                         'subnetID': {'S':str(create_subnet_response['Subnet']['SubnetId'])},
                         'subnetCIDR': {'S':str(create_subnet_response['Subnet']['CidrBlock'])},
@@ -90,7 +89,7 @@ def getVPCInfo(event):
     # Function to get VPC and Subnets Info from DynamoDB
     dynamodb = boto3.resource('dynamodb')
     try:   
-        table = dynamodb.Table('dynamo-db-table-name')
+        table = dynamodb.Table('dynamodb_table_name')
         getDynamoDBResponse = table.scan()
         return getDynamoDBResponse
     except Exception as e:
